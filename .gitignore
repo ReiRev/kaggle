@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# defined by me
+.DS_Store
+*.feather
+*.ftr
+*.csv
