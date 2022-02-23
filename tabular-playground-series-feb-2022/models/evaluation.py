@@ -54,37 +54,30 @@ def cross_validation_predict(model, X, y, X_test=None, metrics=accuracy_score, n
         return oof_train, sum(y_preds) / len(y_preds)
 
 
-def stacking(models, X_train, y_train, X_test=None, n_round=10):
+def stacking(models, X_train, y_train, X_test, n_round=10):
     X_train = X_train.copy()
     y_train = y_train.copy()
-    if X_test is not None:
-        X_test = X_test.copy()
+    X_test = X_test.copy()
     y_preds = []
     oofs = []
     for i in range(n_round):
         y_preds = []
         for j, model in enumerate(models):
             print("{}th {}".format(i, str(model)))
-            if X_test is not None:
-                oof_train, y_pred = cross_validation_predict(
-                    model, X_train, y_train, X_test)
-                X_train["{}-round-{}th-{}".format(i,
-                                                  j, str(model))] = oof_train
-                X_test["{}-round-{}th-{}".format(i, j, str(model))] = y_pred
-                y_preds.append(y_pred)
-                oofs.append(oof_train)
-            else:
-                oof_train = cross_validation_predict(
-                    model, X_train, y_train)
-                X_train["{}-round-{}th-{}".format(i,
-                                                  j, str(model))] = oof_train
-                X_test["{}-round-{}th-{}".format(i, j, str(model))] = y_pred
-                oofs.append(oof_train)
+            columns = []
+            for k in range(const.n_class):
+                columns.append("{}-round-{}th-{}-{}th-class".format(i,
+                                                                    j, str(model), k))
+            oof_train, y_pred = cross_validation_predict(
+                model, X_train, y_train, X_test)
+            X_append_train = pd.DataFrame(oof_train, columns=columns)
+            X_append_test = pd.DataFrame(y_pred, columns=columns)
+            X_train = pd.concat([X_train, X_append_train], axis=1)
+            X_test = pd.concat([X_test, X_append_test], axis=1)
+            y_preds.append(y_pred)
+            oofs.append(oof_train)
 
-    if X_test is not None:
-        return oofs, y_preds
-    else:
-        return oofs
+    return oofs, y_preds
 
 
 def ensemble_predict(models, X_train, y_train, X_test=None):

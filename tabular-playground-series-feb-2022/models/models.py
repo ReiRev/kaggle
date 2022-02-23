@@ -34,25 +34,23 @@ class Lgbm(Model):
 
 class RandomForest(Model):
     def fit(self, X_train, y_train):
-        self.scaler = StandardScaler()
-        self.scaler.fit(X_train)
+        # self.scaler = StandardScaler()
+        # self.scaler.fit(X_train)
         self.model = RandomForestClassifier(**self.params)
-        self.model.fit(self.scaler.transform(X_train), y_train)
+        self.model.fit(X_train, y_train)
 
     def predict(self, X_pred):
-        y_pred = self.model.predict_proba(self.scaler.transform(X_pred))
+        y_pred = self.model.predict_proba(X_pred)
         return y_pred
 
 
 class ERT(Model):
     def fit(self, X_train, y_train):
-        self.scaler = StandardScaler()
-        self.scaler.fit(X_train)
         self.model = ExtraTreesClassifier(**self.params)
-        self.model.fit(self.scaler.transform(X_train), y_train)
+        self.model.fit(X_train, y_train)
 
     def predict(self, X_pred):
-        y_pred = self.model.predict_proba(self.scaler.transform(X_pred))
+        y_pred = self.model.predict_proba(X_pred)
         return y_pred
 
 

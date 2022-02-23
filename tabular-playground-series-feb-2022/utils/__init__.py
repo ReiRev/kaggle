@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 import datetime
 import time
+from config import const
 
 
 def load_datasets(feats):
@@ -12,14 +13,20 @@ def load_datasets(feats):
     return X_train, X_test
 
 
-def load_target(target_name):
+def load_target(target_name=None):
+    if target_name is None:
+        target_name = const.target_name
     le = LabelEncoder()
     train = pd.read_csv('./data/input/train.csv')
+    train.drop(['row_id'], axis=1, inplace=True)
+    train.drop_duplicates(keep='first', inplace=True)
+    train.reset_index(drop=True, inplace=True)
     train[target_name] = le.fit_transform(train[target_name])
+
     return train[target_name]
 
 
-def save_submission(y_pred, cross_val_acc, target_name, prefix):
+def save_submission(y_pred, cross_val_acc, target_name, prefix=''):
     sample_submission = pd.read_csv('./data/input/sample_submission.csv')
     sample_submission[target_name] = y_pred
 

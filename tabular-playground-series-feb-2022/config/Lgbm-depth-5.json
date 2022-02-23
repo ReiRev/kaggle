@@ -1,0 +1,13 @@
+{
+    "objective": "multiclass",
+    "num_class": 10,
+    "learning_rate": 0.00962580067045253,
+    "lambda_l1": 0.2021839842010732,
+    "lambda_l2": 8.32619845715318,
+    "bagging_freq": 6,
+    "min_child_samples": 88,
+    "max_depth": 5,
+    "random_state": 0,
+    "num_boost_round": 1000,
+    "verbosity": -100
+}

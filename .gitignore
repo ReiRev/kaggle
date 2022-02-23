@@ -133,3 +133,4 @@ dmypy.json
 *.feather
 *.ftr
 *.csv
+*.zip
