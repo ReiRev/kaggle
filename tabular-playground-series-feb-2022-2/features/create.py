@@ -54,6 +54,8 @@ class MultipliedATGC(Feature):
         for i, c in enumerate(columns):
             a = re.findall(r'\d+', c)
             for j, atgc in enumerate(["A", "T", "G", "C"]):
+                if a[j] == 0:
+                    continue
                 self.train['column-{}-{}'.format(c, atgc)] = train[c]*int(a[j])
                 self.test['column-{}-{}'.format(c, atgc)] = test[c]*int(a[j])
                 atgc_columns[j].append('column-{}-{}'.format(c, atgc))

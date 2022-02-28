@@ -1,0 +1,1 @@
+{"patience": 30, "layers": 2, "dropout": 0.1, "units": 100, "nb_epoch": 100, "batch_size": 256}
